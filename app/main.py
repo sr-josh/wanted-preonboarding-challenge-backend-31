@@ -1,8 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from api.v1.endpoints.product import router as product_router
+
 
 app = FastAPI()
+
+# 라우터 등록
+app.include_router(product_router, prefix="/api/products", tags=["products"])
 
 # 템플릿 디렉토리 설정
 templates = Jinja2Templates(directory="templates")
@@ -32,3 +37,4 @@ async def read_root():
 @app.get("/products", response_class=HTMLResponse)
 async def get_products(request: Request):
     return templates.TemplateResponse("product_list.html", {"request": request, "products": sample_products})
+
