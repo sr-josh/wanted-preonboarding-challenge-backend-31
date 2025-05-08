@@ -1,6 +1,8 @@
 from fastapi import APIRouter
-from app.database import connection, text
-import json
+from app.database import connection, text, get_session
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from app.models.product import Product
 
 router = APIRouter()
 
@@ -9,10 +11,20 @@ def create_products():
     return {"message": ""}
 
 @router.get("")
-def get_products():
-    result = connection.execute(text("SELECT * FROM products"))
-    rows = result.fetchall()
-    products = [dict(row._mapping) for row in rows]
+def get_products(db: Session = Depends(get_session)):
+
+    
+    products = db.query(Product).all()
+    for product in products:
+        print(product.name, product.created_at)
+
+    db.close()
+
+    # result = connection.execute(text("SELECT * FROM products"))
+    # rows = result.fetchall()
+    # products = [dict(row._mapping) for row in rows]
+
+
     return {"message": products}
 
 @router.get("/{id}")
