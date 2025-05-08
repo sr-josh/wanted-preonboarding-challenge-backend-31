@@ -2,12 +2,27 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from api.v1.endpoints.product import router as product_router
+from api.v1.endpoints.main import router as main_router
+from api.v1.endpoints.category import router as category_router
+from api.v1.endpoints.reviews import router as review_router
+from sqlalchemy import create_engine
 
+# 데이터베이스 엔진  생성
+DB_URL = "postgresql://root:root@db:5432/wanted"
+engine = create_engine(DB_URL, echo=True)
+try:
+    connection = engine.connect()
+    print("DB 연결 성공")
+except Exception as e:
+    print("DB 연결 실패:", e)
 
 app = FastAPI()
 
 # 라우터 등록
 app.include_router(product_router, prefix="/api/products", tags=["products"])
+app.include_router(main_router, prefix="/api/main", tags=["main"])
+app.include_router(category_router, prefix="/api/categories", tags=["categories"])
+app.include_router(review_router, prefix="/api", tags=["reviews"])
 
 # 템플릿 디렉토리 설정
 templates = Jinja2Templates(directory="templates")
@@ -31,10 +46,6 @@ sample_products = [
 ]
 
 @app.get("/", response_class=HTMLResponse)
-async def read_root():
-    return "<h1>Hello</h1>"
-
-@app.get("/products", response_class=HTMLResponse)
 async def get_products(request: Request):
     return templates.TemplateResponse("product_list.html", {"request": request, "products": sample_products})
 
