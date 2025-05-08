@@ -10,8 +10,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./ddl.sql:/docker-entrypoint-initdb.d/00_ddl.sql:ro
-      - ./data:/docker-entrypoint-initdb.d/data:ro
+      - ./data:/docker-entrypoint-initdb.d/
 
   web:
     build: .

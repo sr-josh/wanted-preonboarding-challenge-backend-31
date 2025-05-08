@@ -5,16 +5,6 @@ from api.v1.endpoints.product import router as product_router
 from api.v1.endpoints.main import router as main_router
 from api.v1.endpoints.category import router as category_router
 from api.v1.endpoints.reviews import router as review_router
-from sqlalchemy import create_engine
-
-# 데이터베이스 엔진  생성
-DB_URL = "postgresql://root:root@db:5432/wanted"
-engine = create_engine(DB_URL, echo=True)
-try:
-    connection = engine.connect()
-    print("DB 연결 성공")
-except Exception as e:
-    print("DB 연결 실패:", e)
 
 app = FastAPI()
 

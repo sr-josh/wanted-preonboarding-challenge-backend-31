@@ -1,14 +1,19 @@
 from fastapi import APIRouter
+from app.database import connection, text
+import json
 
 router = APIRouter()
 
 @router.post("")
 def create_products():
-    return {"message": "product registered"}
+    return {"message": ""}
 
 @router.get("")
 def get_products():
-    return {"message": "product list"}
+    result = connection.execute(text("SELECT * FROM products"))
+    rows = result.fetchall()
+    products = [dict(row._mapping) for row in rows]
+    return {"message": products}
 
 @router.get("/{id}")
 def get_product(id: int):
