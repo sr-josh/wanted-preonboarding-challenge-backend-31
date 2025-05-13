@@ -1,31 +1,21 @@
-from fastapi import APIRouter
-from app.database import connection, text, get_session
-from fastapi import Depends
+from fastapi import APIRouter, Depends
+from app.commands.product.create_product import create_product
+from app.queries.product.get_product import get_products
+from app.database import get_session
+from app.schemas.product import ProductQueryParams
 from sqlalchemy.orm import Session
-from app.models.product import Product
 
 router = APIRouter()
 
 @router.post("")
-def create_products():
-    return {"message": ""}
+def create():
+    return create_product()
 
 @router.get("")
-def get_products(db: Session = Depends(get_session)):
-
-    
-    products = db.query(Product).all()
-    for product in products:
-        print(product.name, product.created_at)
-
-    db.close()
-
-    # result = connection.execute(text("SELECT * FROM products"))
-    # rows = result.fetchall()
-    # products = [dict(row._mapping) for row in rows]
-
-
-    return {"message": products}
+# def get_product(params: ProductQueryParams = Depends(), db: Session = Depends(get_session)):
+def get_product(db: Session = Depends(get_session)):
+    # return get_products(params, db)
+    return get_products(db)
 
 @router.get("/{id}")
 def get_product(id: int):
