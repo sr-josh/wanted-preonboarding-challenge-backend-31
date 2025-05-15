@@ -12,10 +12,10 @@ def create():
     return create_product()
 
 @router.get("")
-# def get_product(params: ProductQueryParams = Depends(), db: Session = Depends(get_session)):
-def get_product(db: Session = Depends(get_session)):
-    # return get_products(params, db)
-    return get_products(db)
+def get_product(params: ProductQueryParams = Depends(), db: Session = Depends(get_session)):
+# def get_product(db: Session = Depends(get_session)):
+    return get_products(params, db)
+    # return get_products(db)
 
 @router.get("/{id}")
 def get_product(id: int):
