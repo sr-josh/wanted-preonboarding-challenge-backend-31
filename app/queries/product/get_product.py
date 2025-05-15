@@ -4,7 +4,6 @@ from app.schemas.product import ProductQueryParams
 from fastapi import Depends
 
 def get_products(params: ProductQueryParams, db: Session):
-# def get_products(db: Session):
     products = db.query(Product).all()
 
     total = len(products)

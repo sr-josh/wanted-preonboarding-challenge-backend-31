@@ -6,3 +6,5 @@ __pycache__/
 build/
 dist/
 *.egg-info/
+
+debezium-libs/debezium-scripting-2.7.3.Final.jar
